@@ -38,12 +38,12 @@
   <title>Materias</title>
 </svelte:head>
 
-<div class="uk-section uk-section-primary">
+<div class="uk-section uk-section-primary uk-text-center uk-section-xsmall">
   <div class="uk-container">
-    <h1>Materias</h1>
+    <h1><span uk-icon="icon: copy; ratio: 3.5"></span> Materias</h1>
   </div>
 </div>
-<div class="uk-section uk-section-muted">
+<div class="uk-section uk-section-muted uk-section-xsmall">
   <div class="uk-container">
     <!-- 1 -->
 
@@ -101,7 +101,7 @@
 </div>
 
 
-<div class="uk-section uk-section-muted">
+<div class="uk-section uk-section-muted uk-section-xsmall">
   <div class="uk-container">
     <!-- 2 -->
     <hr class="uk-divider-icon" />
@@ -155,4 +155,9 @@
 
     <!-- fin 2 -->
   </div>
+</div>
+<div class="uk-grid-match uk-grid-small uk-text-center" uk-grid>
+    <div class="uk-width-1-12@m">
+        <div class="uk-card uk-card-default uk-card-body"><a href="#" uk-totop uk-scroll> </a></div>
+    </div>
 </div>

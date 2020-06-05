@@ -27,18 +27,29 @@ import Materias from './Materias.svelte';
 import Seccion from './Seccion.svelte';
 import Home from './Home.svelte';
 import Notas from './Notas.svelte';
+import NotasTodas from './NotasTodas.svelte';
+
+let usuarios = [
+        {admin: 'gZgt0nxJJ9a4Rz5n3LPjTI8E5Sj1'},
+        {staff: 'sohAGIsWzoQrsw895Tc9QyJv8EA3'},
+        {staff: 'Ef8CMKoDp2azKIiC9J6DbtHEhmx2'},
+        ];
+
 
 const options = [
-		{title: 'Home', component: Home },
-		{title: 'Alumnos', component: Alumnos },
-        {title: 'Materias', component: Materias },
-        {title: 'Seccion', component: Seccion },
-        {title: 'Notas', component: Notas },
-	];
+		{title: 'Home', component: Home, admin: true, staff: true },
+		{title: 'Alumnos', component: Alumnos, admin: true, staff: false  },
+        {title: 'Materias', component: Materias, admin: true, staff: false },
+        {title: 'Seccion', component: Seccion, admin: true, staff: false },
+        {title: 'Nueva Nota', component: Notas, admin: true, staff: true},
+        {title: 'Lista de Notas', component: NotasTodas, admin: true, staff: true}
+    ];
+    
+    
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
-let selected = options[0];
+let selected = options[5];
 
 var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 var f =new Date();
@@ -84,12 +95,17 @@ const Salir = (user) =>{
     <div class="uk-navbar-right uk-margin-right">
          
 <div class="uk-inline">
-    <span uk-icon="thumbnails"></span>
+    <span uk-icon="grid"></span>
     <div uk-dropdown="pos: top-right">
         <ul class="uk-nav uk-dropdown-nav">
-              <li class="uk-nav-header">Menu</li>
               {#each options as option,i}
-                <li><a href="javascript:void(0)" on:click={()=>{Call(i)}} >{option.title}</a></li>
+                {#each usuarios as usuario}
+                    {#if user.uid == usuario.admin && option.admin}
+                    <li><a href="javascript:void(0)" on:click={()=>{Call(i)}} > <span uk-icon="chevron-double-right"></span> {option.title}</a></li>
+               {:else if user.uid == usuario.staff && option.staff}
+                    <li><a href="javascript:void(0)" on:click={()=>{Call(i)}} > <span uk-icon="chevron-double-right"></span> {option.title}</a></li>
+                {/if}
+                {/each}
               {/each}
         </ul>
     </div>

@@ -72,9 +72,9 @@ sfRef.get().then(collections => {
   <title>Notas</title>
 </svelte:head>
 
-<div class="uk-section uk-section-primary">
+<div class="uk-section uk-section-primary uk-text-center uk-section-xsmall">
   <div class="uk-container">
-    <h1>Notas</h1>
+    <h1><span uk-icon="icon: file-text; ratio: 3.5"></span> Notas</h1>
   </div>
 </div>
 
@@ -190,3 +190,4 @@ sfRef.get().then(collections => {
 </div>
 </div>
 </div>
+

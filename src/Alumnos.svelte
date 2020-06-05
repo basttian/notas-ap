@@ -17,7 +17,7 @@ let selected;
 
 
 /* cantidad de registros para la paginacion */
-let page = 100;
+let page = 50;
 let countTotal;
 let firstReg = null;
 
@@ -78,13 +78,6 @@ const addAlumnos = async(u) => {
 import {myFunction} from "./table.js";
 
 
-/* Print pdf  */
-const Pdf = () => {
-    const doc =  new jsPDF('p', 'pt', 'letter');
-    doc.autoTable({ html: '#tabla' })
-    doc.save('alumnos.pdf')
-}
-
 let data=[];
 
 </script>
@@ -100,15 +93,13 @@ a.disabled {
 
 <svelte:head>
   <title>Alumnos</title>
-  <script src="https://unpkg.com/jspdf@1.5.3/dist/jspdf.min.js"></script>
-  <script src="https://unpkg.com/jspdf-autotable@3.5.3/dist/jspdf.plugin.autotable.js"></script>
 </svelte:head>
 
-<div class="uk-section uk-section-primary">
+<div class="uk-section uk-section-primary uk-text-center uk-section-xsmall">
   <div class="uk-container">
 
     <h1>
-      <span uk-icon="icon: users; ratio: 2" />
+      <img src="./img/student.svg" width="70" height="70" uk-svg>
       Alumnos
     </h1>
 
@@ -169,7 +160,7 @@ a.disabled {
 
 <div class="uk-overflow-auto">
 <table class="uk-table uk-table-striped uk-table-condensed uk-text-nowrap" id="tabla">
-<caption><a href="javascript:void(0)" uk-icon="file-pdf" on:click={Pdf} uk-tooltip="title: Gruadar PDF; pos: bottom" >  </a></caption>
+<caption>Lista de Alumnos</caption>
     <thead>
     <tr>
         <th class="uk-table-shrink">Aula</th>

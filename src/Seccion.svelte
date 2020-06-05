@@ -19,9 +19,9 @@ let idAula;
 
 
 <!-- Encabezado -->
-<div class="uk-section uk-section-primary">
+<div class="uk-section uk-section-primary uk-text-center uk-section-xsmall">
     <div class="uk-container">
-        <h1>Sección</h1>
+        <h1><span uk-icon="icon: album; ratio: 3.5" /> Sección</h1>
     </div>
 </div>
 <div class="uk-section uk-section-muted">
@@ -70,7 +70,6 @@ let idAula;
                         }> </a></li>
                     </ul>
                 </div>
-                <p>{aula.descripcion} </p>
                 <div class="uk-card-footer">
                     <input class="uk-input uk-form-blank uk-form-expand" bind:value={aula.nombre} type="text">
                 </div>
