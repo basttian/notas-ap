@@ -6,6 +6,7 @@
   import "firebase/performance";
   import "firebase/analytics";
 
+
  // Your web app's Firebase configuration
   var firebaseConfig = {
     apiKey: "AIzaSyA-yOx6yYkcsCSK5kIffXt5_Cue7-ZaLmI",
@@ -21,35 +22,30 @@
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 
-
+/* Importss */
 import Alumnos from './Alumnos.svelte';
 import Materias from './Materias.svelte';
 import Seccion from './Seccion.svelte';
 import Home from './Home.svelte';
 import Notas from './Notas.svelte';
 import NotasTodas from './NotasTodas.svelte';
+import Usuarios from './User.svelte';
 
-let usuarios = [
-        {admin: 'gZgt0nxJJ9a4Rz5n3LPjTI8E5Sj1'},
-        {staff: 'sohAGIsWzoQrsw895Tc9QyJv8EA3'},
-        {staff: 'Ef8CMKoDp2azKIiC9J6DbtHEhmx2'},
-        ];
-
-
+/* Component */
 const options = [
-		{title: 'Home', component: Home, admin: true, staff: true },
-		{title: 'Alumnos', component: Alumnos, admin: true, staff: false  },
-        {title: 'Materias', component: Materias, admin: true, staff: false },
-        {title: 'Seccion', component: Seccion, admin: true, staff: false },
-        {title: 'Nueva Nota', component: Notas, admin: true, staff: true},
-        {title: 'Lista de Notas', component: NotasTodas, admin: true, staff: true}
+		{title: 'Home', component: Home, admin: true, staff: true, status: true },
+		{title: 'Alumnos', component: Alumnos, admin: true, staff: false, status: true  },
+        {title: 'Materias', component: Materias, admin: true, staff: false, status: true },
+        {title: 'Seccion', component: Seccion, admin: true, staff: false, status: true },
+        {title: 'Nueva Nota', component: Notas, admin: true, staff: true, status: true},
+        {title: 'Lista de Notas', component: NotasTodas, admin: true, staff: true, status: true},
+        {title: 'Usuarios', component: Usuarios, admin: true, staff: false, status: true },
     ];
-    
-    
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
-let selected = options[5];
+/* component home 0 */
+let selected = options[0];
 
 var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 var f =new Date();
@@ -73,14 +69,15 @@ const Salir = (user) =>{
     });
 }
 
-</script>
 
+</script>
 <svelte:head>
 	<title>Home</title>
 </svelte:head>
 
 <FirebaseApp {firebase}>
-	<User let:user let:auth>
+	<User let:user={user} let:auth={auth} >
+
 <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
 <nav class="uk-navbar-container" uk-navbar>
     <div class="uk-navbar-left">
@@ -97,25 +94,29 @@ const Salir = (user) =>{
 <div class="uk-inline">
     <span uk-icon="grid"></span>
     <div uk-dropdown="pos: top-right">
+<Collection path={`usuarios`} query={ref => ref.where("useruid", "array-contains-any", [user.uid])} let:data={uD} let:ref={uR} log>
         <ul class="uk-nav uk-dropdown-nav">
+            <!-- User loop -->
+            {#each uD as ready}
+                <!-- option loop -->
               {#each options as option,i}
-                {#each usuarios as usuario}
-                    {#if user.uid == usuario.admin && option.admin}
-                    <li><a href="javascript:void(0)" on:click={()=>{Call(i)}} > <span uk-icon="chevron-double-right"></span> {option.title}</a></li>
-               {:else if user.uid == usuario.staff && option.staff}
-                    <li><a href="javascript:void(0)" on:click={()=>{Call(i)}} > <span uk-icon="chevron-double-right"></span> {option.title}</a></li>
-                {/if}
-                {/each}
+                    {#if user.uid === ready.useruid[1] && option.admin && 'admin' === ready.useruid[0] && option.status === ready.useruid[4] }
+                        <li><a href="javascript:void(0)" on:click={()=>{Call(i)}} > <span uk-icon="chevron-double-right"></span> {option.title}</a></li>
+                    {:else if user.uid === ready.useruid[1] && option.staff && 'staff' === ready.useruid[0] && option.status === ready.useruid[4] }
+                        <li><a href="javascript:void(0)" on:click={()=>{Call(i)}} > <span uk-icon="chevron-double-right"></span> {option.title}</a></li>
+                    {/if}
               {/each}
+            {/each}
         </ul>
+</Collection>
     </div>
     <button uk-tooltip="title: Salir; pos: bottom" on:click={()=>{Salir(auth)}} uk-icon="sign-out"></button>
 </div>
 
-    
     </div>
 </nav>
  </div>
+            
 <!-- Btn Ingreso Google  -->
 <div slot="signed-out">
 <div class="uk-child-width-1-3@m" uk-grid uk-scrollspy="cls: uk-animation-fade; target: .uk-card; delay: 500; repeat: true">
@@ -139,8 +140,7 @@ const Salir = (user) =>{
 </div>
 </div> 
 
-
-
+    <!-- component place -->
   <svelte:component this={selected.component}/>
 
 

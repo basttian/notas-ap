@@ -9,20 +9,28 @@
   let txtMateria;
   let aulas = [];
   let nombre;
+
+ 
+  let txtResponsable;
+  let profesor;
+
   const db = firebase.firestore();
 
-  const AgregarMaterias = async (arr, materia) => {
-    //console.log(arr, materia)
+  const AgregarMaterias = async (arr, materia, responsable) => {
+    //console.log(arr, materia, responsable)
     for (let index = 0; index < arr.aulas.length; index++) {
       const element = arr.aulas[index];
-      const created = new Date().getTime();
+    
       nombre = materia.txtMateria;
+      profesor = responsable.txtResponsable;
+    
       await db
         .collection(`aulas/${element}/materias/`)
-        .add({ created, nombre })
+        .add({ nombre, profesor })
         .then(resp => {
           txtMateria = "";
           aulas = "";
+          txtResponsable = "";
           //console.log("Materia agregada correctamente")
           UIkit.notification({
             message: "<span uk-icon='icon: check'></span> Agregado con éxito.",
@@ -83,15 +91,23 @@
           </div>
         </div>
         <div>
-
+          <div class="uk-margin">
+            <input
+              class="uk-input"
+              type="text"
+              bind:value={txtResponsable}
+              placeholder="Ingrese el responsable" />
+          </div>
+        </div>
+        <div>
           <div class="uk-margin">
             <button
               class="uk-button uk-button-primary"
               disabled={!txtMateria}
               on:click={() => {
-                AgregarMaterias({ aulas }, { txtMateria });
+                AgregarMaterias({ aulas }, { txtMateria }, { txtResponsable } );
               }}>
-              Ingresar
+              Agregar materia
             </button>
           </div>
         </div>
@@ -158,6 +174,6 @@
 </div>
 <div class="uk-grid-match uk-grid-small uk-text-center" uk-grid>
     <div class="uk-width-1-12@m">
-        <div class="uk-card uk-card-default uk-card-body"><a href="#" uk-totop uk-scroll> </a></div>
+        <div class="uk-card uk-card-default uk-card-body"><a href="javascript:void(0)" uk-totop uk-scroll> </a></div>
     </div>
 </div>

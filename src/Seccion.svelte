@@ -21,7 +21,7 @@ let idAula;
 <!-- Encabezado -->
 <div class="uk-section uk-section-primary uk-text-center uk-section-xsmall">
     <div class="uk-container">
-        <h1><span uk-icon="icon: album; ratio: 3.5" /> Sección</h1>
+        <h1><span uk-icon="icon: album; ratio: 3.5" /> Sección </h1>
     </div>
 </div>
 <div class="uk-section uk-section-muted">
@@ -34,7 +34,10 @@ let idAula;
 </div> 
 
 <!-- Inicia Coleccion seccion -->
-<Collection path={"aulas"} let:data let:ref on:ref query={ (ref) => ref.orderBy('nombre','asc') } >
+<Collection 
+path={"aulas"} let:data let:ref on:ref 
+query={ (ref) => ref.orderBy('nombre','asc') } 
+>
 
 <div slot="loading"><div uk-spinner></div></div>
 <div class="uk-child-width-1-1 uk-child-width-1-3@s uk-grid-match uk-grid-small" uk-grid>   

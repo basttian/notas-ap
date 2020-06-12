@@ -26,10 +26,12 @@ var db = firebase.firestore();
   let answer = "";
   let aulasData = [];
 
+var today = new Date();
+var year = today.getFullYear();
 
 const addNotas = async (x,y,m,t) => {
 
-let sfRef = await db.collection(`alumnos/${x}/notas/`).where('materia','==', m ).where('trimestre','==', t );
+let sfRef = await db.collection(`alumnos/${x}/notas/`).where('cicloLectivo','==',year).where('materia','==', m ).where('trimestre','==', t );
 sfRef.get().then(collections => {
   collections.forEach(collection => {
       console.log('Found subcollection with id:', collection.id);
@@ -45,7 +47,7 @@ sfRef.get().then(collections => {
                 materia: m,
                 nota: a,
                 user: y,
-                created: new Date().getTime()
+                created: new Date().getTime(),
               })
               .then(resp => {
                 a = 0;
@@ -117,25 +119,30 @@ sfRef.get().then(collections => {
   </select>
   </div>
 
-<Doc path={`aulas/${selectedAula}`} let:data={claseData} let:ref={claseRef}>
+<!--on:data={m => materia = (m.detail.data[0].id)}-->
+
+<Doc path={`aulas/${selectedAula}`} let:data={claseData} let:ref={claseRef}   let:error={err}>
   <Collection
     path={claseRef.collection('materias')}
     let:data={materias}
     let:ref={materiasRef}
-    on:data={m => materia = (m.detail.data[0].id)}
+    
     log>
     <div slot="loading">
       <div uk-spinner />
     </div>
-    	<div class="uk-width-1-1">
-    <select class="uk-select" bind:value={materia} on:change={() => (selectedMateria = '')}>
-      {#each materias as materia}
-        <option value={materia.id}>{materia.nombre}</option>
-      {/each}
-    </select>
+    <div class="uk-width-1-1">
+      <select class="uk-select" bind:value={materia} on:change={() => (selectedMateria = '')}>
+        {#each materias as materia}
+          <option value={materia.id}>{materia.nombre}</option>
+        {/each}
+      </select>
     </div>
+    <div slot="fallback">{err}</div>
   </Collection>
 </Doc>
+
+
 
    <Collection path={"alumnos"} let:data={alumnos} query={ref=>ref.where("clase","==", `${selectedAula}` ).orderBy('nombre','asc')} let:ref on:data={a => alumno = (a.detail.data)}>
    <div slot="loading"><div uk-spinner></div></div>
@@ -181,7 +188,7 @@ sfRef.get().then(collections => {
         <div class="uk-card uk-card-default uk-card-large uk-card-body">
           	<div class="uk-card-title"></div>
 
-          <TABLANOTAS alumno={alumno} materia={materia}/>
+          <TABLANOTAS alumno={alumno} materia={materia} />
 
         </div>
 </div><!-- End second section -->

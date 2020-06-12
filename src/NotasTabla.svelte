@@ -10,8 +10,14 @@
 
 export let alumno;
 export let materia;
+/* Enviar ciclo lectivo actual a la tabla notas */
+var today = new Date();
+var year = today.getFullYear();
 
 </script>
+
+
+  
 
 
   <Doc path={`alumnos/${alumno}`} let:data={alumnos} let:ref={alumnosRef}>
@@ -19,9 +25,10 @@ export let materia;
       <div uk-spinner />
     </div>
 
+<!-- Filtra la tabla notas por materia y ciclo lectivo actual -->
     <Collection
       path={alumnosRef.collection('notas')}
-      query={ref => ref.where('materia', '==', `${materia}`).orderBy('trimestre','asc')}
+      query={ref => ref.where('materia', '==', `${materia}`).where('cicloLectivo','==', year).orderBy('trimestre','asc')}
       let:data
       let:ref
       on:data

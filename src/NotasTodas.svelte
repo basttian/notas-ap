@@ -10,6 +10,9 @@
   /* Variables */
   let aD,eD, mD;
   let selectedAula,selectedMateria;
+  var today = new Date();
+  var year = today.getFullYear();
+
 
 import {calcular, clean} from "./table.js"
 async function handleChange(){
@@ -22,6 +25,7 @@ async function handleChange(){
     doc.autoTable({ html: "#miTabla" });
     doc.save(`${a}${m}.pdf`);
   };
+
 
 </script>
 
@@ -66,23 +70,31 @@ async function handleChange(){
           </select>
         </div>
         <div>
-          <Doc path={`aulas/${selectedAula}`} let:data let:ref={aR}>
+<!--on:data={m => (selectedMateria = m.detail.data[0].id)}-->
+
+          <Doc 	path={`aulas/${selectedAula}`}
+          let:data 
+          let:ref={aR}
+          >
             <Collection
-              path={aR.collection('materias')}
+              path={aR.collection('materias') } 
               let:data={mD}
               let:ref={mR}
-              on:data={m => (selectedMateria = m.detail.data[0].id)}
-              log>
+
+              log
+              >
               <div slot="loading">
                 <div uk-spinner />
               </div>
               <div class="uk-width-1-1">
                 <select class="uk-select" bind:value={selectedMateria} on:change={handleChange} >
+                    <option>Seleccionar materia...</option>
                   {#each mD as materia}
                     <option value={materia.id}>{materia.nombre}</option>
                   {/each}
                 </select>
               </div>
+
             </Collection>
           </Doc>
         </div>
@@ -107,9 +119,7 @@ async function handleChange(){
 
     <Collection
       path={`alumnos`}
-      query={ref => ref
-          .where('clase', '==', `${selectedAula}`)
-          .orderBy('nombre', 'asc')}
+      query={ref => ref.where('clase', '==', `${selectedAula}`).orderBy('nombre', 'asc')}
       let:data
       let:ref={aR}>
       <div slot="loading">
@@ -141,11 +151,14 @@ async function handleChange(){
 
             {#each data as item}
               <tr>
-                <td class="uk-align-left">{item.nombre}</td>
+                <td class="uk-align-left">{item.nombre}
+
+
+                </td>
 
                 <Collection
                   path={`alumnos/${item.id}/notas`}
-                  query={ref => ref.where('materia', '==', `${selectedMateria}`)}
+                  query={ref => ref.where('materia', '==', `${selectedMateria}`).where('cicloLectivo','==',new Date(item.created).getFullYear())}
                   let:data={oD}
                   let:ref={oR}
                   >
@@ -157,6 +170,7 @@ async function handleChange(){
                       <td>{item.nota}</td>
                  
                   {/each}
+
                 </Collection>
                 
                   <td><span class="uk-label"></span></td>
@@ -166,19 +180,23 @@ async function handleChange(){
 
           </tbody>
           <tfoot>
+             <Doc path={`aulas/${selectedAula}/materias/${selectedMateria}`} let:data={onceData} let:ref log>
+              <div slot="loading">
+                <div uk-spinner />
+              </div>
             <tr>
-              <th class="uk-width-*" colspan="4">Ciclo Lectivo: </th>
+              <th class="uk-width-*" colspan="5">Ciclo Lectivo: {new Date().getFullYear()}</th>
             </tr>
             <tr>
-              <th class="uk-width-*" colspan="4">Asignatura: </th>
+				      <th class="uk-width-*" colspan="5">Asignatura: {onceData.nombre}</th>
             </tr>
             <tr>
-              <th class="uk-width-*" colspan="4">Docente: </th>
+              <th class="uk-width-*" colspan="5">Docente: {onceData.profesor}</th>
             </tr>
+            </Doc>
           </tfoot>
         </table>
       </div>
-
     </Collection>
 
   </div>
