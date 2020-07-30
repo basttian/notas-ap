@@ -1,8 +1,12 @@
-   
+<script>
+  import { FirebaseApp, User, Doc, Collection } from "sveltefire";
+  import firebase from "firebase/app";
+</script>
 <svelte:head>
 	<title>Home</title>
 </svelte:head>
-
+<FirebaseApp {firebase}>
+    <User let:user={user} let:auth={auth} >
 <div class="uk-section uk-section-muted">
     <div class="uk-container">
 
@@ -24,7 +28,8 @@
                         </div>
                     </div>
                     <div class="uk-card-body">
-                        Bienvenido.
+                        Bienvenido. Pongase en contacto con el administrador para comenzar a utilizar el sistema. 
+                        <a href="https://api.whatsapp.com/send?phone=542664003830&text=Mi%20e-mail%20{user.email}%20Notas-app." target="_blank"><span uk-icon="icon: whatsapp"></span> Whatsapp</a>
                     </div>
                     <div class="uk-card-footer">
                         
@@ -38,5 +43,7 @@
 
     </div>
 </div>
+</User>
+</FirebaseApp>
 
 <hr class="uk-divider-icon">
