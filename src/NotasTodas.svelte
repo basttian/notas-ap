@@ -19,13 +19,14 @@ async function handleChange(){
   await clean();
 }
 
- /* Print pdf  */
-  const Pdf = async (a,m) => {
-    var doc = await new jsPDF("p", "pt", "letter");
-    doc.autoTable({ html: "#miTabla" });
-    doc.save(`${a}${m}.pdf`);
-  };
 
+ const Pdf = async (a,m) => {
+  var doc = await new jsPDF('p', 'pt', 'a4');
+    doc.autoTable({ html: "#miTabla" });
+    setTimeout(function(){
+      doc.save(`${a}${m}.pdf`);   
+    }, 1000);
+  }
 
 </script>
 
@@ -126,6 +127,8 @@ async function handleChange(){
         <div uk-spinner />
       </div>
       <div class="uk-overflow-auto">
+
+
         <table class="uk-table uk-table-divider" id="miTabla" >
 
           <!-- Materia -->
@@ -196,6 +199,7 @@ async function handleChange(){
             </Doc>
           </tfoot>
         </table>
+       
       </div>
     </Collection>
 
