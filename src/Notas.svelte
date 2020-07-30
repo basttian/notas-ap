@@ -19,7 +19,7 @@ var db = firebase.firestore();
   let alumno;
   let materias;
   let materia;
-  let a = 0;
+  let a = 1;
   let scoops = 1;
 
   let selectedAula = [];
@@ -159,10 +159,10 @@ sfRef.get().then(collections => {
 
 	<div class="uk-width-1-1">
 	     <div class="uk-margin">
-	          <input class="uk-input" type="number" bind:value={a} min=0 max=10 placeholder="Nota">
+	          <input class="uk-input" type="number" bind:value={a} min=1 max=10 placeholder="Nota">
 	      </div>
 	       <div class="uk-margin">
-	          <input class="uk-range" type="range"  bind:value={a} min=0 max=10 step="0.5">
+	          <input class="uk-range" type="range"  bind:value={a} min=1 max=10 step="0.5">
 	       </div>
 	</div>
 
@@ -170,7 +170,7 @@ sfRef.get().then(collections => {
 
 <div class="uk-width-1-1">
     <form on:submit|preventDefault={()=>{addNotas(alumno,user.uid,materia,scoops)}}>
-        <button class="uk-button uk-button-primary uk-button-large uk-width-1-1" disabled={!a}>Agregar Nota</button>
+        <button class="uk-button uk-button-primary uk-button-large uk-width-1-1" disabled={a>11 || !a || a<1}>Agregar Nota</button>
     </form>
 </div>
 
